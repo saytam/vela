@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
@@ -12,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import vela.game.Board;
 import vela.maps.MapReader;
@@ -33,28 +35,28 @@ public class MainWindow {
     }
 
     public void show() throws URISyntaxException, IOException {
-        Group root = new Group();
-//        root.getChildren().add(new Button("hello"));
+        String mapName = "level1";
+        VelaMap map = createMap(mapName);
+        Group drawnMap = drawHexMap(map);
+        Scene scene = new Scene(drawnMap, 1024, 768, Color.BLACK);
+        this.stage.setScene(scene);
+        this.stage.show();
+    }
 
+    private VelaMap createMap(String mapName) throws URISyntaxException, IOException {
+        URL resourceUrl = getClass().getResource("/maps/"+mapName+".map");
+        Path resourcePath = Paths.get(resourceUrl.toURI());
+        MapReader mapReader = new MapReader();
+        return mapReader.read(resourcePath);
+    }
 
-
+    private Group drawHexMap(VelaMap map) {
+        Group mapGroup = new Group();
         int size = 20;
         double height = size * 2;
         double factor = 0.86;
         double width = Math.floor(height*factor);
-        double origin_x = width/2;
-        double origin_y = height/2;
-        ImagePattern grassPattern = new ImagePattern(new Image("assets/images/grass1.png"));
-        ImagePattern sandPattern = new ImagePattern(new Image("assets/images/sand1.png"));
 
-
-        URL resourceUrl = getClass().getResource("/maps/level1.map");
-
-        Path resourcePath = Paths.get(resourceUrl.toURI());
-
-
-        MapReader mapReader = new MapReader();
-        VelaMap map = mapReader.read(resourcePath);
 
         map.getTiles().forEach(tile -> {
             Polygon hex = new Polygon();
@@ -69,27 +71,22 @@ public class MainWindow {
                     x_offset+width,  y_offset+3*height/4,
                     x_offset+width/2.0,  y_offset+height,
                     x_offset,  y_offset+3*height/4);
-            ImagePattern pattern = (tile.getTerrain().equals("a"))? grassPattern : sandPattern;
-            hex.setFill(pattern);
+
+            hex.setFill(getPatternForCode(tile.getTerrain()));
             hex.setOnMouseEntered(event -> highlight(hex));
             hex.setOnMouseExited(event -> unHighlight(hex));
-            root.getChildren().add(hex);
+
+            Label text = new Label(tile.getX()+","+tile.getY());
+            text.setFont(new Font(8));
+
+            text.setWrapText(true);
+
+            text.setLayoutX(x_offset+10);
+            text.setLayoutY(y_offset+10);
+            mapGroup.getChildren().add(hex);
+            mapGroup.getChildren().add(text);
         });
-
-
-        for (int x = 0; x < map.getWidth(); x++){
-            for (int y = 0; y < map.getHeight(); y++) {
-
-
-            }
-        }
-
-
-
-        Scene scene = new Scene(root, 1024, 768, Color.BLACK);
-
-        this.stage.setScene(scene);
-        this.stage.show();
+        return mapGroup;
     }
 
     private void highlight(Shape source) {
@@ -97,5 +94,16 @@ public class MainWindow {
     }
     private void unHighlight(Shape source){
         source.setEffect(null);
+    }
+
+    private ImagePattern getPatternForCode(String patterCode){
+        switch (patterCode){
+            case "a":
+                return new ImagePattern(new Image("assets/images/grass1.png"));
+            case "b":
+                return new ImagePattern(new Image("assets/images/sand1.png"));
+            default:
+                return new ImagePattern(new Image("assets/images/forest1.png"));
+        }
     }
 }

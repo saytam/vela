@@ -22,7 +22,7 @@ public class Board {
     public void init(){
         for (int y = 0; y < TILES_Y; y++) {
             for (int x = 0; x < TILES_X; x++) {
-//                tiles.add(new Tile(x, y));
+                tiles.add(new Tile("a", x, y));
             }
         }
     }
