@@ -8,6 +8,9 @@ import vela.config.GameConfig;
 import vela.config.Screens;
 import vela.config.UiConfig;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 public class Main extends Application {
 
     public static void main(String[] args) {
@@ -20,10 +23,16 @@ public class Main extends Application {
         ApplicationContext context = new AnnotationConfigApplicationContext(UiConfig.class, GameConfig.class);
         Screens screens = context.getBean(Screens.class);
         screens.setPrimaryStage(theStage);
-        if (!screens.loginScreen().login()){
-            System.exit(0);
-        }
+//        if (!screens.loginScreen().login()){
+//            System.exit(0);
+//        }
 
-        screens.mainWindow().show();
+        try {
+            screens.mainWindow().show();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
