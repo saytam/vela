@@ -4,9 +4,11 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
@@ -81,12 +83,18 @@ public class Board {
 
 
         map.getTiles().forEach(tile -> {
+            StackPane tileStack = new StackPane();
             Polygon hex = new Polygon();
             double x_offset = tile.getX()*width;
             double y_offset = 0.75*tile.getY()*height;
+
+
             if (tile.getY()%2 != 0){
                 x_offset += width/2;
             }
+            tileStack.setLayoutX(x_offset);
+            tileStack.setLayoutY(y_offset);
+
             hex.getPoints().addAll( x_offset, y_offset+height/4.0,
                     x_offset+width/2.0,  y_offset,
                     x_offset+width,  y_offset+height/4.0,
@@ -95,40 +103,37 @@ public class Board {
                     x_offset,  y_offset+3*height/4);
 
             hex.setFill(getPatternForCode(tile.getTerrain()));
-            hex.setOnMouseEntered(event -> highlight(hex));
-            hex.setOnMouseExited(event -> unHighlight(hex));
+            tileStack.setOnMouseEntered(event -> highlight(hex));
+            tileStack.setOnMouseExited(event -> unHighlight(hex));
 
+            tileStack.getChildren().add(hex);
             Position pos = new Position(tile.getX(), tile.getY());
 
-            Pane pane = new Pane();
+
 
             if (tileAtPosition(pos).isOccupied()){
                 TileItem tileItem = tile.getItem();
-                Image image = new Image("assets/images/dragon.png");
-                pane.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
-                pane.setLayoutX(x_offset);
-                pane.setLayoutY(y_offset);
+                ImageView imageView = new ImageView("assets/images/dragon.png");
+                imageView.setFitHeight(30);
+                imageView.setFitWidth(30);
+                imageView.setX(x_offset);
+                imageView.setY(y_offset);
+                tileStack.getChildren().add(imageView);
+
             }
 
-            Label cartCoords = new Label(pos.getX()+","+pos.getY());
-            cartCoords.setFont(new Font(8));
-            cartCoords.setWrapText(true);
-            cartCoords.setLayoutX(x_offset+10);
-            cartCoords.setLayoutY(y_offset+10);
-
-            Label cubeCoords = new Label(pos.getCubeX()+","+pos.getCubeY()+","+pos.getCubeZ());
-            cubeCoords.setFont(new Font(8));
-            cubeCoords.setWrapText(true);
-            cubeCoords.setLayoutX(x_offset+10);
-            cubeCoords.setLayoutY(y_offset+20);
+//            Label cartCoords = new Label(pos.getX()+","+pos.getY());
+//            cartCoords.setFont(new Font(8));
+//            cartCoords.setWrapText(true);
+//            cartCoords.setLayoutX(x_offset+10);
+//            cartCoords.setLayoutY(y_offset+10);
 //
-            mapGroup.getChildren().addAll(
-                    hex,
-                    pane
-//                    pane
-//                    ,cartCoords
-//                    ,cubeCoords
-            );
+//            Label cubeCoords = new Label(pos.getCubeX()+","+pos.getCubeY()+","+pos.getCubeZ());
+//            cubeCoords.setFont(new Font(8));
+//            cubeCoords.setWrapText(true);
+//            cubeCoords.setLayoutX(x_offset+10);
+//            cubeCoords.setLayoutY(y_offset+20);
+            mapGroup.getChildren().add(tileStack);
         });
         return mapGroup;
     }
