@@ -3,13 +3,18 @@ package vela.game
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import vela.maps.VelaMap
+
+import static testdata.Maps.*
 
 class BoardSpec extends Specification {
 
     Board board
+    VelaMap map
 
     def setup(){
-        board = new Board()
+        map = aMap(8, 6)
+        board = new Board(map)
     }
 
     @Unroll
@@ -28,9 +33,7 @@ class BoardSpec extends Specification {
         0 | 1
         2 | 5
         5 | 2
-        Board.TILES_X - 1 | 1
-        1 | Board.TILES_Y - 1
-        Board.TILES_X - 1 | Board.TILES_Y - 1
+        8 - 1 | 6 - 1
     }
 
     def "place units"(){

@@ -17,4 +17,18 @@ public class Position {
     public int getY() {
         return y;
     }
+
+    public int getCubeX(){
+        int offset = y/2;
+        return x-offset;
+    }
+
+    public int getCubeY(){
+        return y;
+    }
+
+    public int getCubeZ(){
+        return -getCubeX() - getCubeY();
+    }
+
 }
