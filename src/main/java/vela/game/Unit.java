@@ -10,12 +10,13 @@ public class Unit extends TileItem {
     private int health = 0;
 
 
-    public Unit (String name, int speed, int attackPower, int defense, int health){
+    public Unit (String name, int speed, int attackPower, int defense, int health, String image){
         this.name = name;
         this.speed = speed;
         this.attackPower = attackPower;
         this.defense = defense;
         this.health = health;
+        this.image = image;
     }
 
     public Unit(){}
@@ -39,4 +40,6 @@ public class Unit extends TileItem {
     public int getHealth() {
         return health;
     }
+
+
 }

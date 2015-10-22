@@ -51,7 +51,7 @@ class BoardSpec extends Specification {
         where:
         boardPosition | xPosition
         Board.StartPosition.LEFT | 0
-        Board.StartPosition.RIGHT | 9
+        Board.StartPosition.RIGHT | 7
     }
 
     @Unroll

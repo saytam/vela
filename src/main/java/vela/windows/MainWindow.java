@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import vela.game.Board;
 import vela.game.Position;
+import vela.game.Unit;
 import vela.game.Units;
 import vela.maps.MapReader;
 import vela.maps.VelaMap;
@@ -15,6 +16,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class MainWindow {
 
@@ -22,7 +26,6 @@ public class MainWindow {
 
     public MainWindow(Stage stage){
         this.stage = stage;
-
     }
 
     public void show() throws URISyntaxException, IOException {
@@ -30,7 +33,10 @@ public class MainWindow {
         VelaMap map = createMap(mapName);
 
         Board board = new Board(map);
-        board.placeUnit(Units.dragon(), new Position(2, 3));
+
+        board.placeUnits(asList(Units.dragon(), Units.knight()), Board.StartPosition.LEFT);
+        board.placeUnits(asList(Units.knight(), Units.dragon()), Board.StartPosition.RIGHT);
+
 
         Group drawnBoard = board.draw();
 

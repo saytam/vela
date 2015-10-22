@@ -76,7 +76,7 @@ public class Board {
 
     public Group draw() {
         Group mapGroup = new Group();
-        int size = 20;
+        int size = 40;
         double height = size * 2;
         double factor = 0.86;
         double width = Math.floor(height*factor);
@@ -113,7 +113,7 @@ public class Board {
 
             if (tileAtPosition(pos).isOccupied()){
                 TileItem tileItem = tile.getItem();
-                ImageView imageView = new ImageView("assets/images/dragon.png");
+                ImageView imageView = new ImageView("assets/images/"+tileItem.getImage());
                 imageView.setFitHeight(30);
                 imageView.setFitWidth(30);
                 imageView.setX(x_offset);
