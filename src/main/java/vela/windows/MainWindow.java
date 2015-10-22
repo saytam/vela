@@ -10,12 +10,14 @@ import vela.game.Unit;
 import vela.game.Units;
 import vela.maps.MapReader;
 import vela.maps.VelaMap;
+import vela.ui.Renderer;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.rmi.Remote;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -37,8 +39,8 @@ public class MainWindow {
         board.placeUnits(asList(Units.dragon(), Units.knight()), Board.StartPosition.LEFT);
         board.placeUnits(asList(Units.knight(), Units.dragon()), Board.StartPosition.RIGHT);
 
-
-        Group drawnBoard = board.draw();
+        Renderer renderer = new Renderer();
+        Group drawnBoard = renderer.draw(board);
 
         Scene scene = new Scene(drawnBoard, 1024, 768, Color.BLACK);
         this.stage.setScene(scene);
