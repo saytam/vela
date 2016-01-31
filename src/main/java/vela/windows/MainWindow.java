@@ -5,20 +5,18 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import vela.game.Board;
-import vela.game.Position;
-import vela.game.Unit;
 import vela.game.Units;
 import vela.maps.MapReader;
 import vela.maps.VelaMap;
+import vela.ui.HexRenderer;
 import vela.ui.Renderer;
+import vela.ui.SquareRenderer;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.rmi.Remote;
-import java.util.List;
 
 import static java.util.Arrays.asList;
 
@@ -39,7 +37,7 @@ public class MainWindow {
         board.placeUnits(asList(Units.dragon(), Units.knight()), Board.StartPosition.LEFT);
         board.placeUnits(asList(Units.knight(), Units.dragon()), Board.StartPosition.RIGHT);
 
-        Renderer renderer = new Renderer();
+        Renderer renderer = new SquareRenderer();
         Group drawnBoard = renderer.draw(board);
 
         Scene scene = new Scene(drawnBoard, 1024, 768, Color.BLACK);
